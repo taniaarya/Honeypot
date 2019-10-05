@@ -26,7 +26,13 @@ with gzip.open(filepath) as file:
     if identifier in line:
       command = line.split(identifier)[-1].rstrip()
       command = command[command.find("#")+2:]
-      command = command.replace("\x08", "").replace("\x07", "")
+      commands = command.split("|")
+      for com in commands:
+        com = com.replace("\x08", "").replace("\x07", "").strip()
+        command_list.append(com)
+        if com in attacker_levels.keys():
+            level = attacker_levels.get(com)
+      '''
       #re.sub(r'[^\x00-\x7f]', r'', command)s
       if "|" in command:
         command_list.extend(command.split("|"))
@@ -34,7 +40,7 @@ with gzip.open(filepath) as file:
         command_list.append(command)
       if command in attacker_levels:
         level = attacker_levels.get(command)
-  
+     '''
   num_commands = len(command_list)
   time_out = lines[-1].decode("utf-8").split(" ")[1][:-1][:-4]
   datetime_in = datetime.strptime(time_in, "%H:%M:%S")
