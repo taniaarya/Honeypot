@@ -35,14 +35,14 @@ with gzip.open(filepath) as file:
   elapsed_timedelta = datetime_out - datetime_in
   elapsed_time = f"{elapsed_timedelta.minutes}"
 
-  print(f"CTID: {ctid}")
-  print(f"IP: {ip}")
-  print(f"Date: {date}")
-  print(f"Time in: {time_in}")
-  print(f"Time out: {time_out}")
-  print(f"Elapsed time (min): {elapsed_time}")
-  print(f"Num commands: {num_commands}")
-  print(f"Commands run: {command_list}")
+  print("CTID: {}".format(ctid))
+  print("IP: {}".format(ip))
+  print("Date: {}".format(date))
+  print("Time in: {}".format(time_in))
+  print("Time out: {}".format(time_out))
+  print("Elapsed time (min): {}".format(elapsed_time))
+  print("Num commands: {}".format(num_commands))
+  print("Commands run: {}".format(command_list))
 
 
   
