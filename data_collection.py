@@ -4,13 +4,14 @@ from Scripts import attacker_levels
 from datetime import datetime
 
 session = sys.argv[1]
+print(session)
 
-filepath = f"/root/MITM_data/sessions/{session}.gz"
+filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
 with gzip.open(filepath) as file:
   lines = file.readlines()
   ctid = lines[2].split("Container ID: ")[-1]
-  identifier = f"root@CT{ctid}:~# "
+  identifier = "root@CT{}:~# ".format(ctid)
   ip = lines[3].split("Attacker IP Address: ")[-1]
   date = lines[7].split(" ")[1]   # Date in YYYY-MM-DD format
   time_in = lines[7].split(" ")[-1]  # time in 24 hrs HH:MM:SS...
