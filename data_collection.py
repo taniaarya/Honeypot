@@ -31,7 +31,9 @@ with gzip.open(filepath) as file:
         com = com.replace("\x08", "").replace("\x07", "").strip()
         command_list.append(com)
         if com in attacker_levels.keys():
-            level = attacker_levels.get(com)
+            level = max(level, attacker_levels.get(com))
+      if len(com) == 0:
+        level = 1
       '''
       #re.sub(r'[^\x00-\x7f]', r'', command)s
       if "|" in command:
@@ -57,6 +59,7 @@ with gzip.open(filepath) as file:
   print("Time out: {}".format(time_out))
   print("Elapsed time (min): {}".format(minutes))
   print("Num commands: {}".format(num_commands))
+  print("Level: {}".format(level))
   print("Commands run: {}".format(command_list))
 
 
