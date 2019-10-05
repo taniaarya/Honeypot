@@ -9,16 +9,12 @@ filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
 with gzip.open(filepath) as file:
   lines = file.readlines()
-  print(lines[2])
-  print(type(lines[2]))
   str_ctid = lines[2].decode("utf-8")
-  print(str_ctid)
-  print(type(str_ctid))
   ctid = str_ctid.split("Container ID: ")[-1]
   identifier = "root@CT{}:~# ".format(ctid)
   ip = lines[3].decode("utf-8").split("Attacker IP Address: ")[-1]
-  date = lines[7].split(" ")[1]   # Date in YYYY-MM-DD format
-  time_in = lines[7].split(" ")[-1]  # time in 24 hrs HH:MM:SS...
+  date = lines[7].decode("utf-8").split(" ")[1]   # Date in YYYY-MM-DD format
+  time_in = lines[7].decode("utf-8").split(" ")[-1]  # time in 24 hrs HH:MM:SS...
   command_list = []
   level = 0
 
@@ -33,7 +29,7 @@ with gzip.open(filepath) as file:
         level = attacker_levels.get(command)
   
   num_commands = len(command_list)
-  time_out = lines[-1].split(" ")[1][:-1]
+  time_out = lines[-1].decode("utf-8").split(" ")[1][:-1]
   datetime_in = datetime.strptime(time_in, "%H:%M:%S")
   datetime_out = datetime.strptime(time_out, "%H:%M:%S")
   elapsed_timedelta = datetime_out - datetime_in
