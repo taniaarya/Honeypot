@@ -13,7 +13,6 @@ with gzip.open(filepath) as file:
   str_ctid = lines[2].decode("utf-8").rstrip()
   ctid = str_ctid.split("Container ID: ")[-1]
   identifier = "root@CT{}:".format(ctid)
-  print(identifier)
   ip = lines[3].decode("utf-8").split("Attacker IP Address: ")[-1].rstrip()
   date = lines[7].decode("utf-8").split(" ")[1]   # Date in YYYY-MM-DD format
   time_in = lines[7].decode("utf-8").split(" ")[-1][:-5]  # time in 24 hrs HH:MM:SS...
@@ -27,7 +26,8 @@ with gzip.open(filepath) as file:
     if identifier in line:
       command = line.split(identifier)[-1].rstrip()
       command = command[command.find("#")+2:]
-      #re.sub(r'[^\x00-\x7f]', r'', command)
+      command = command.replace("\x08", "").replace("\x07", "")
+      #re.sub(r'[^\x00-\x7f]', r'', command)s
       if "|" in command:
         command_list.extend(command.split("|"))
       else:
