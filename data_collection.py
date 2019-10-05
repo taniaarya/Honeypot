@@ -4,15 +4,19 @@ import attacker_levels
 from datetime import datetime
 
 session = sys.argv[1]
-print(session)
 
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
 with gzip.open(filepath) as file:
   lines = file.readlines()
-  ctid = lines[2].split("Container ID: ")[-1]
+  print(lines[2])
+  print(type(lines[2]))
+  str_ctid = lines[2].decode("utf-8")
+  print(str_ctid)
+  print(type(str_ctid))
+  ctid = str_ctid.split("Container ID: ")[-1]
   identifier = "root@CT{}:~# ".format(ctid)
-  ip = lines[3].split("Attacker IP Address: ")[-1]
+  ip = lines[3].decode("utf-8").split("Attacker IP Address: ")[-1]
   date = lines[7].split(" ")[1]   # Date in YYYY-MM-DD format
   time_in = lines[7].split(" ")[-1]  # time in 24 hrs HH:MM:SS...
   command_list = []
