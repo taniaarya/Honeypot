@@ -27,12 +27,22 @@ with gzip.open(filepath) as file:
       if command in attacker_levels:
         level = attacker_levels.get(command)
   
-  num_commands = command_list.__len__
+  num_commands = len(command_list)
   time_out = lines[-1].split(" ")[1][:-1]
   datetime_in = datetime.strptime(time_in, "%H:%M:%S")
   datetime_out = datetime.strptime(time_out, "%H:%M:%S")
   elapsed_timedelta = datetime_out - datetime_in
   elapsed_time = f"{elapsed_timedelta.minutes}"
+
+  print(f"CTID: {ctid}")
+  print(f"IP: {ip}")
+  print(f"Date: {date}")
+  print(f"Time in: {time_in}")
+  print(f"Time out: {time_out}")
+  print(f"Elapsed time (min): {elapsed_time}")
+  print(f"Num commands: {num_commands}")
+  print(f"Commands run: {command_list}")
+
 
   
 
