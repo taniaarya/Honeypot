@@ -1,6 +1,6 @@
 import sys
 import gzip
-from Scripts import attacker_levels
+import attacker_levels
 from datetime import datetime
 
 session = sys.argv[1]
@@ -33,7 +33,7 @@ with gzip.open(filepath) as file:
   datetime_in = datetime.strptime(time_in, "%H:%M:%S")
   datetime_out = datetime.strptime(time_out, "%H:%M:%S")
   elapsed_timedelta = datetime_out - datetime_in
-  elapsed_time = f"{elapsed_timedelta.minutes}"
+  elapsed_time = "{}".format(elapsed_timedelta.minutes)
 
   print("CTID: {}".format(ctid))
   print("IP: {}".format(ip))
