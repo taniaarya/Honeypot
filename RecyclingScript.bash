@@ -92,5 +92,5 @@ iptables --table filter --delete INPUT --in-interface enp4s2 --source 0.0.0.0/0 
 
 iptables --table filter --insert INPUT 1 --in-interface enp4s2 --source $2 --destination $3 --jump DROP
 
-# extra nohup command we used with the MITM Tailing Script **may need an output directory
-# nohup /root/Honeypot_Scripts/tailing_script.sh 2>&1 &
+# Rerun the tailing script **may need an output directory
+nohup /root/Honeypot_Scripts/tailing_script.sh 2>&1 &
