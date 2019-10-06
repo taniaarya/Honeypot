@@ -55,12 +55,18 @@ with gzip.open(filepath) as file:
   print("Level: {}".format(level))
   print("Commands run: {}".format(command_list))
 
-  execute = "{},{},{},{},{},{},{},{},{}".format(ctid, ip, date, time_in, time_out,
+  execute = "{},{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
                                                  duration_in_s, num_commands, level,
                                                  command_list)
 
-  os.system(execute)
-
+  if ctid == 101:
+    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=0 -d {}".format(execute))
+  elif ctid == 102:
+    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=1766837841 -d {}".format(execute))
+  elif ctid == 103:
+    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=221991272 -d {}".format(execute))
+  elif ctid == 104:
+    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361 -d {}".format(execute))
 
 
 
