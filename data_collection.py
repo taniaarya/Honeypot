@@ -41,7 +41,8 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
     level = 1
 
   num_commands = len(command_list)
-  time_out = lines[-1].decode("utf-8").split(" ")[1][:-1][:-4]
+  #time_out = lines[-1].decode("utf-8").split(" ")[1][:-1][:-4]
+  time_out = lines[-1].split(" ")[1][:-1][:-4]
   datetime_in = datetime.strptime(time_in, "%H:%M:%S")
   datetime_out = datetime.strptime(time_out, "%H:%M:%S")
   elapsed_timedelta = datetime_out - datetime_in
