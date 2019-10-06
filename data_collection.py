@@ -23,8 +23,6 @@ with gzip.open(filepath) as file:
 
   for line in lines:
     line = line.decode("utf-8").encode("ascii", "ignore").decode("utf-8")
-    #re.sub(r'[^\x00-\x7f]', r'', line)
-    #line = line.decode("utf-8")
     if identifier in line:
       command = line.split(identifier)[-1].rstrip()
       command = command[command.find("#")+2:]
@@ -60,11 +58,8 @@ with gzip.open(filepath) as file:
   print("Commands run: {}".format(command_list))
 
   str_list = ' : '.join(command_list)
-  str_parsed_list = "; ".join(parsed_command_list)
+  #str_parsed_list = "; ".join(parsed_command_list)
 
-  #execute = "{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
-                                                 #duration_in_s, num_commands, level,
-                                                 #str_list)
   execute = []
   first_half = ["log", "-k", "/root/Honeypot_Scripts/hacs.json", "-s"]
   execute.extend(first_half)
@@ -78,7 +73,7 @@ with gzip.open(filepath) as file:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361")
   execute.append("-d")
 
-  last_half_list = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list), str(str_parsed_list)]
+  last_half_list = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
   last_half = ",".join(last_half_list)
   execute.append(last_half)
   print(execute)
