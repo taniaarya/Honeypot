@@ -10,7 +10,7 @@ file_system = sys.argv[2]
 
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
-with gzip.open(filepath) as file:
+with gzip.open(filepath, encoding='ascii') as file:
   lines = file.readlines()
   str_ctid = lines[2].decode("utf-8").rstrip()
   ctid = str_ctid.split("Container ID: ")[-1]
