@@ -30,10 +30,11 @@ with gzip.open(filepath) as file:
       for com in commands:
         com = com.replace("\x08", "").replace("\x07", "").strip()
         command_list.append(com)
-        if com in attacker_levels.keys():
-            level = max(level, attacker_levels.get(com))
-      if len(com) == 0:
-        level = 1
+        for key in attacker_levels.keys():
+          if key in com:
+            level = max(level, key)
+  if len(command_list) == 0:
+    level = 1
 
   num_commands = len(command_list)
   time_out = lines[-1].decode("utf-8").split(" ")[1][:-1][:-4]
