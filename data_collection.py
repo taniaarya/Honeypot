@@ -3,6 +3,7 @@ import gzip
 from attacker_levels import attacker_levels
 from datetime import datetime
 import os
+import subprocess
 
 session = sys.argv[1]
 file_system = sys.argv[2]
@@ -57,10 +58,24 @@ with gzip.open(filepath) as file:
 
   str_list = ' : '.join(command_list)
 
-  execute = "{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
-                                                 duration_in_s, num_commands, level,
-                                                 str_list)
-
+  #execute = "{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
+                                                 #duration_in_s, num_commands, level,
+                                                 #str_list)
+  execute = []
+  first_half = ["log", "-k", "/root/Honeypot_Scripts/hacs.json", "-s"]
+  execute.extend(first_half)
+  if ctid == 101:
+    execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=0")
+  elif ctid == 102:
+    execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=1766837841")
+  elif ctid == 103:
+    execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=221991272")
+  elif ctid == 104:
+    execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361")
+  last_half = ["-d", file_system, ip, date, time_in, time_out, duration_in_s, num_commands, level, str_list]
+  execute.extend(last_half)
+  subprocess.call(execute)
+  '''
   if ctid == 101:
     os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=0 -d {}".format(execute))
   elif ctid == 102:
@@ -69,8 +84,7 @@ with gzip.open(filepath) as file:
     os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=221991272 -d {}".format(execute))
   elif ctid == 104:
     os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361 -d {}".format(execute))
-
-
+  '''
 
   
 
