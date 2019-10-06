@@ -10,19 +10,23 @@ file_system = sys.argv[2]
 
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
-with gzip.open(filepath, encoding='ascii') as file:
-  lines = file.readlines()
-  str_ctid = lines[2].decode("utf-8").rstrip()
+with gzip.open(filepath) as file:
+  lines = file.readlines().decode("utf-8")
+  #str_ctid = lines[2].decode("utf-8").rstrip()
+  str_ctid = lines[2].rstrip()
   ctid = str_ctid.split("Container ID: ")[-1]
   identifier = "root@CT{}:".format(ctid)
-  ip = lines[3].decode("utf-8").split("Attacker IP Address: ")[-1].rstrip()
-  date = lines[7].decode("utf-8").split(" ")[1]   # Date in YYYY-MM-DD format
-  time_in = lines[7].decode("utf-8").split(" ")[-1][:-5]  # time in 24 hrs HH:MM:SS...
+  #ip = lines[3].decode("utf-8").split("Attacker IP Address: ")[-1].rstrip()
+  ip = lines[3].split("Attacker IP Address: ")[-1].rstrip()
+  #date = lines[7].decode("utf-8").split(" ")[1]   # Date in YYYY-MM-DD format
+  date = lines[7].split(" ")[1]   # Date in YYYY-MM-DD format
+  #time_in = lines[7].decode("utf-8").split(" ")[-1][:-5]  # time in 24 hrs HH:MM:SS...
+  time_in = lines[7].split(" ")[-1][:-5]  # time in 24 hrs HH:MM:SS...
   command_list = []
   level = 0
 
   for line in lines:
-    line = line.decode("utf-8").encode("ascii", "ignore").decode("utf-8")
+    #line = line.decode("utf-8").encode("ascii", "ignore").decode("utf-8")
     if identifier in line:
       command = line.split(identifier)[-1].rstrip()
       command = command[command.find("#")+2:]
