@@ -72,7 +72,7 @@ with gzip.open(filepath) as file:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=221991272")
   elif ctid == 104:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361")
-  last_half = ["-d", str(file_system), ip, date, time_in, time_out, duration_in_s, num_commands, level, str_list]
+  last_half = ["-d", str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
   execute.extend(last_half)
   subprocess.call(execute)
   '''
