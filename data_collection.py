@@ -74,11 +74,27 @@ with gzip.open(filepath) as file:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361")
   execute.append("-d")
 
-  last_half = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
-  last_half = ",".join(last_half)
+  last_half_list = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
+  last_half = ",".join(last_half_list)
   execute.append(last_half)
   print(execute)
   subprocess.call(execute)
+
+  token = "xoxb-713760682096-772446814498-H38LlXIiejDvFSjIr4sTK67d"
+  channel = "#2c_attackers"
+  slack_client = SlackClient(token)
+  message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
+  message += "Attacker IP: " + str(ip) + "\n"
+  message += "File System: " + str(file_system) + "\n"
+  message += "Level: " + str(level) + "\n"
+  message += "Date: " + str(date) + "\n"
+  message += "Time in: " + str(time_in) + "\n"
+  message += "Time out: " + str(time_out) + "\n"
+  message += "Elapsed Time (sec): " + str(duration_in_s) + "\n"
+  message += "Number of Commands: " + str(num_commands) + "\n"
+  message += "Commands run: " + "\n".join(last_half_list)
+  slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
+
   '''
   if ctid == 101:
     os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=0 -d {}".format(execute))
