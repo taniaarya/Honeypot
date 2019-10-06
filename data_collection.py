@@ -36,7 +36,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
         command_list.append(com)
         for key in attacker_levels.keys():
           if key in com:
-            level = max(level, key)
+            level = max(level, attacker_levels.get(key))
   if len(command_list) == 0:
     level = 1
 
