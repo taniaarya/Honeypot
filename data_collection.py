@@ -45,6 +45,9 @@ with gzip.open(filepath) as file:
   duration_in_s = elapsed_timedelta.total_seconds()
   #minutes = divmod(duration_in_s, 60)[0]
   #elapsed_time = "{}".format(elapsed_timedelta.min)
+  parsed_command_list = []
+  for command in command_list:
+    parsed_command_list.append(command.split(" ")[0])
 
   print("CTID: {}".format(ctid))
   print("IP: {}".format(ip))
@@ -57,6 +60,7 @@ with gzip.open(filepath) as file:
   print("Commands run: {}".format(command_list))
 
   str_list = ' : '.join(command_list)
+  str_parsed_list = "; ".join(parsed_command_list)
 
   #execute = "{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
                                                  #duration_in_s, num_commands, level,
@@ -74,13 +78,13 @@ with gzip.open(filepath) as file:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361")
   execute.append("-d")
 
-  last_half_list = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
+  last_half_list = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list), str(str_parsed_list)]
   last_half = ",".join(last_half_list)
   execute.append(last_half)
   print(execute)
   subprocess.call(execute)
 
-  token = "xoxb-713760682096-772446814498-H38LlXIiejDvFSjIr4sTK67d"
+  '''
   channel = "#2c_attackers"
   slack_client = SlackClient(token)
   message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
@@ -94,16 +98,6 @@ with gzip.open(filepath) as file:
   message += "Number of Commands: " + str(num_commands) + "\n"
   message += "Commands run: " + "\n".join(last_half_list)
   slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
-
-  '''
-  if ctid == 101:
-    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=0 -d {}".format(execute))
-  elif ctid == 102:
-    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=1766837841 -d {}".format(execute))
-  elif ctid == 103:
-    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=221991272 -d {}".format(execute))
-  elif ctid == 104:
-    os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361 -d {}".format(execute))
   '''
 
   
