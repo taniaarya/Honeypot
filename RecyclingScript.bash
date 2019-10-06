@@ -13,7 +13,7 @@ echo "killer starting"
 # kill the tail script
 pkill -f "tailing_script.sh $1"
 
-# kill the tailing process **file path needs changing
+# kill the tailing process started by the tailscript
 pkill -f "tail -f -n 1 var/lib/lxc/$1/rootfs/var/log/auth.log"
 
 # kill the MITM tailing
@@ -103,7 +103,7 @@ then
 	cp -r /root/Workspace /var/lib/lxc/$1/rootfs/root/
 fi
 
-# iptables rules used before **needs updating **elif to determine which ip to use?
+# iptables rules to prevent attacker re-entry and open the container for connections
 iptables --table filter --delete INPUT --in-interface enp4s2 --source $2 --protocol tcp --destination-port <PORTNUM> --jump ACCEPT
 iptables --table filter --delete INPUT --in-interface enp4s2 --source 0.0.0.0/0 --protocol tcp --destination-port <PORTNUM> --jump DROP
 
