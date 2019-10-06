@@ -64,16 +64,20 @@ with gzip.open(filepath) as file:
   execute = []
   first_half = ["log", "-k", "/root/Honeypot_Scripts/hacs.json", "-s"]
   execute.extend(first_half)
-  if ctid == 101:
+  if "101" in ctid:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=0")
-  elif ctid == 102:
+  elif "102" in ctid:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=1766837841")
-  elif ctid == 103:
+  elif "103" in ctid:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=221991272")
-  elif ctid == 104:
+  elif "104" in ctid:
     execute.append("https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=747273361")
-  last_half = ["-d", str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
-  execute.extend(last_half)
+  execute.append("-d")
+
+  last_half = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
+  last_half = ",".join(last_half)
+  execute.append(last_half)
+  print(execute)
   subprocess.call(execute)
   '''
   if ctid == 101:
