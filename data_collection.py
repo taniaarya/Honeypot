@@ -57,7 +57,7 @@ with gzip.open(filepath) as file:
 
   str_list = ' : '.join(command_list)
 
-  execute = "{},{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
+  execute = "{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
                                                  duration_in_s, num_commands, level,
                                                  str_list)
 
