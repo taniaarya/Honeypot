@@ -2,9 +2,10 @@ import sys
 import gzip
 from attacker_levels import attacker_levels
 from datetime import datetime
-import re
+import os
 
 session = sys.argv[1]
+file_system = sys.argv[2]
 
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
@@ -34,33 +35,33 @@ with gzip.open(filepath) as file:
             level = max(level, attacker_levels.get(com))
       if len(com) == 0:
         level = 1
-      '''
-      #re.sub(r'[^\x00-\x7f]', r'', command)s
-      if "|" in command:
-        command_list.extend(command.split("|"))
-      else:
-        command_list.append(command)
-      if command in attacker_levels:
-        level = attacker_levels.get(command)
-     '''
+
   num_commands = len(command_list)
   time_out = lines[-1].decode("utf-8").split(" ")[1][:-1][:-4]
   datetime_in = datetime.strptime(time_in, "%H:%M:%S")
   datetime_out = datetime.strptime(time_out, "%H:%M:%S")
   elapsed_timedelta = datetime_out - datetime_in
   duration_in_s = elapsed_timedelta.total_seconds()
-  minutes = divmod(duration_in_s, 60)[0]
-  elapsed_time = "{}".format(elapsed_timedelta.min)
+  #minutes = divmod(duration_in_s, 60)[0]
+  #elapsed_time = "{}".format(elapsed_timedelta.min)
 
   print("CTID: {}".format(ctid))
   print("IP: {}".format(ip))
   print("Date: {}".format(date))
   print("Time in: {}".format(time_in))
   print("Time out: {}".format(time_out))
-  print("Elapsed time (min): {}".format(minutes))
+  print("Elapsed time (min): {}".format(duration_in_s))
   print("Num commands: {}".format(num_commands))
   print("Level: {}".format(level))
   print("Commands run: {}".format(command_list))
+
+  execute = "{},{},{},{},{},{},{},{},{}".format(ctid, ip, date, time_in, time_out,
+                                                 duration_in_s, num_commands, level,
+                                                 command_list)
+
+  os.system(execute)
+
+
 
 
   
