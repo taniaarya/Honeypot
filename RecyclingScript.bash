@@ -82,8 +82,25 @@ randNum=$RANDOM
 
 if [ $((randNum%2)) = 0 ] 
 then
-	# code to transfer files **replace fileSystem with folder names
-	cp -r /root/fileSystem /var/lib/lxc/$1/rootfs/root/
+	# code to transfer files
+	cp -r /root/Backup_Files /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Conferences_and_Meetings /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Dates_and_Times /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Documents /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Downloads /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Exported_Files /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Imported_Files /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/International_Branches /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/IT_Department /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Job_Applications /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Marketing /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Payroll /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Portfolio /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Project_Planning /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Sponsors /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Users /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Volunteering /var/lib/lxc/$1/rootfs/root/
+	cp -r /root/Workspace /var/lib/lxc/$1/rootfs/root/
 fi
 
 # iptables rules used before **needs updating **elif to determine which ip to use?
