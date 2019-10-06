@@ -13,8 +13,11 @@ echo "killer starting"
 # kill the tail script
 pkill -f "tailing_script.sh $1"
 
-# kill the tailing process
+# kill the tailing process **file path needs changing
 pkill -f "tail -f -n 1 var/lib/lxc/$1/rootfs/var/log/auth.log"
+
+# kill the MITM tailing
+pkill -f "node /root/MITM/mitm/index.js HACS200_2C 10000 $3 $1 true mitm.js"
 
 # recycle time
 pct stop $1
@@ -68,7 +71,7 @@ sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' /var/lib/lxc/
 pct exec $1 service ssh restart
 
 # MITM transition steps
-nohup node /root/MITM/mitm/index.js HACS200_2C 10000 $2 $1 true mitm.js > mitm_file 2>&1 &
+nohup node /root/MITM/mitm/index.js HACS200_2C 10000 $3 $1 true mitm.js > mitm_file 2>&1 &
 
 # needed this to fix a bug
 pct stop $1 && pct unmount $1
@@ -89,5 +92,5 @@ iptables --table filter --delete INPUT --in-interface enp4s2 --source 0.0.0.0/0 
 
 iptables --table filter --insert INPUT 1 --in-interface enp4s2 --source $2 --destination $3 --jump DROP
 
-# extra nohup command we used with the MITM Tailing Script **needs updating
-# nohup /root/<TAILSCRIPTNAME> >> /root/<OUTPUTDIRECTORY> 2>&1 &
+# extra nohup command we used with the MITM Tailing Script **may need an output directory
+# nohup /root/Honeypot_Scripts/tailing_script.sh 2>&1 &
