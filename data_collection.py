@@ -79,9 +79,9 @@ with gzip.open(filepath) as file:
   print(execute)
   subprocess.call(execute)
 
-  '''
-  channel = "#2c_attackers"
-  slack_client = SlackClient(token)
+  
+  #channel = "#2c_attackers"
+  #slack_client = SlackClient(token)
   message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
   message += "Attacker IP: " + str(ip) + "\n"
   message += "File System: " + str(file_system) + "\n"
@@ -92,8 +92,11 @@ with gzip.open(filepath) as file:
   message += "Elapsed Time (sec): " + str(duration_in_s) + "\n"
   message += "Number of Commands: " + str(num_commands) + "\n"
   message += "Commands run: " + "\n".join(last_half_list)
-  slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
-  '''
+  #slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
+  
+  execute_mail = ["echo", "-e", message, "|", "mail", "-s", "Y'all been hacked", "tarya@terpmail.umd.edu"]
+  subprocess.call(execute_mail)
+
 
   
 
