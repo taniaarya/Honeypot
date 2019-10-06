@@ -11,7 +11,7 @@
 echo "killer starting"
 
 # kill the tail script
-kill -9 $(ps aux | awk '/tailing_script.sh/ {print $2}')
+pkill -f "tailing_script.sh $1"
 
 # kill the tailing process
 pkill -f "tail -f -n 1 var/lib/lxc/$1/rootfs/var/log/auth.log"
@@ -67,9 +67,8 @@ sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' /var/lib/lxc/
 # service restart
 pct exec $1 service ssh restart
 
-# MITM transition steps from last year **needs updating
-# nohup node /root/MITM/mitm/index.js HACS101_1C 10000 172.20.0.3 102 true
-# mitm_102.js > mitm_file 2>&1 &
+# MITM transition steps
+nohup node /root/MITM/mitm/index.js HACS200_2C 10000 $2 $1 true mitm.js > mitm_file 2>&1 &
 
 # needed this to fix a bug
 pct stop $1 && pct unmount $1
@@ -80,7 +79,7 @@ randNum=$RANDOM
 
 if [ $((randNum%2)) = 0 ] 
 then
-	# code to transfer files
+	# code to transfer files **replace fileSystem with folder names
 	cp -r /root/fileSystem /var/lib/lxc/$1/rootfs/root/
 fi
 
