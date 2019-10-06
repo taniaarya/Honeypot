@@ -57,7 +57,7 @@ with gzip.open(filepath) as file:
 
   execute = "{},{},{},{},{},{},{},{},{},{}".format(file_system, ip, date, time_in, time_out,
                                                  duration_in_s, num_commands, level,
-                                                 command_list)
+                                                 str(command_list))
 
   if ctid == 101:
     os.system("log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/1D4AcKhWjwQPbfSssV-UOeht6kDiC2DBKovljgUsMlss/edit#gid=0 -d {}".format(execute))
