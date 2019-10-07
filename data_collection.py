@@ -16,6 +16,10 @@ file_system = sys.argv[2]
 # stores email to be sent
 EMAIL = os.getenv('HP_EMAIL')
 
+# gets slack token
+TOKEN = os.getenv('SLACK_TOKEN')
+slack_client = slack.WebClient(token=TOKEN)
+
 # filepath for MITM sessions (uses argument given)
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
@@ -72,9 +76,11 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
 
       # sets up new command mailing
       if mail_new_command != "":
-        print(EMAIL)
+        response = slack_client.chat_postMessage(channel='#2c_attackers', text=mail_new_command, username="New Command Found")
+        '''
         execute_new_mail = ["echo", "-e", mail_new_command, "|", "mail", "-s", "New Command Found", EMAIL]
         subprocess.call(execute_new_mail)
+        '''
   
   # attacker is level 1 if no commands are run
   if len(command_list) == 0:
@@ -144,13 +150,9 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   subprocess.call(execute)
 
   
-  #channel = "#2c_attackers"
-  token = "vvvv"
-  slack_client = slack.WebClient(token=token)
-  #message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
-  
+  message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
   # forms email message 
-  message = ""
+  #message = ""
   message += "Conatiner ID: " + str(ctid) + "\n"
   message += "Attacker IP: " + str(ip) + "\n"
   message += "File System: " + str(file_system) + "\n"
@@ -162,11 +164,14 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   message += "Number of Commands: " + str(num_commands) + "\n"
   message += "Commands run: " + "\n".join(last_half_list)
   #slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
+  response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="Y'all been compromised")
   
+  '''
   # sets up command to send email
   execute_mail = ["echo", "-e", message, "|", "mail", "-s", "Y'all been hacked", EMAIL]
   # sends email
   subprocess.call(execute_mail)
+  '''
 
 
   
