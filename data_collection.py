@@ -59,7 +59,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
       for com in commands:
         # removes extraneous hex characters and adds to master list of commands
         # FIX
-        com = com.replace("\x08", "").replace("\x07", "").strip()
+        #com = com.replace("\x08", "").replace("\x07", "").strip()
         command_list.append(com)
         # checks if command matches any commands in attacker levels dictionary
         found_key = False
@@ -162,7 +162,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   message += "Time out: " + str(time_out) + "\n"
   message += "Elapsed Time (sec): " + str(duration_in_s) + "\n"
   message += "Number of Commands: " + str(num_commands) + "\n"
-  message += "Commands run: " + "\n".join(last_half_list)
+  message += "Commands run: " + "\n".join(command_list)
   #slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
   response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="Y'all been compromised")
   
