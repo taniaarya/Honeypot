@@ -4,7 +4,7 @@ from attacker_levels import attacker_levels
 from datetime import datetime
 import os
 import subprocess
-from slackclient import SlackClient
+import slack
 
 # $1 = session id
 # $2 = file system - "yes" or "no"?
@@ -14,7 +14,7 @@ session = sys.argv[1]
 file_system = sys.argv[2]
 
 # stores email to be sent
-EMAIL = os.getenv('EMAIL')
+EMAIL = os.getenv('HP_EMAIL')
 
 # filepath for MITM sessions (uses argument given)
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
@@ -71,7 +71,8 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
           mail_new_command += "{}\n".format(com)
 
       # sets up new command mailing
-      if mail_new_command:
+      if mail_new_command != "":
+        print(EMAIL)
         execute_new_mail = ["echo", "-e", mail_new_command, "|", "mail", "-s", "New Command Found", EMAIL]
         subprocess.call(execute_new_mail)
   
@@ -145,7 +146,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   
   #channel = "#2c_attackers"
   token = "vvvv"
-  slack_client = SlackClient(token)
+  slack_client = slack.WebClient(token=token)
   #message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
   
   # forms email message 
