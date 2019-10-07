@@ -48,11 +48,14 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
               if [ $numConn -eq 1 ]
             	then
                   # echo "Adding rules"
-                  # removes sentinnel file
-                  rm /tmp/login_$1
+                  # Logic: The attacker disconnects and numConn = 0 --> /tmp/login file is made & disconnect timer is started
+                  # After __ sec, if the attacker hasnt come back, kill the container
+                  # if the attacker comes back, delete /tmp/login and kill the timer
+                  # repeat
+                  #rm /tmp/login_$1
                   
                   # kills the timer
-                  pkill -f "timer $1"
+                  #pkill -f "timer $1"
 
                   # removes rules in case of overlap
                   iptables --table filter --delete FORWARD --protocol tcp --destination $2 --dport 22 --jump DROP
@@ -75,11 +78,30 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
             	if [ $numConn -eq 0 ] && [ $connMade -eq 1 ]
             	then
                     # adds the disconnect timestamp to the login file
-                    date -u +%s > /tmp/login_$1
+                    #date -u +%s > /tmp/login_$1
                     # starts the 10 minute timer
-                    nohup /root/Honeypot_Scripts/timer $1 $2 $ip $session &
+                    #nohup /root/Honeypot_Scripts/timer $1 $2 $ip $session &
+
+                    # adds firewall rules to block out attacker, and re
+                    iptables --table filter --delete FORWARD --source $ip --destination $2 --in-interface enp4s2 --out-interface vmbr0 --jump ACCEPT
+                    iptables --table filter --delete FORWARD --protocol tcp --destination $2 --dport 22 --jump DROP
+                    iptables --table filter --insert FORWARD --source $ip --destination $2 --in-interface enp4s2 --out-interface vmbr0 --jump DROP
+
+                    # checks if the self-created directories exist on the container to determine whether or not container had filesystem installed
+                    file=$(pct exec $1 "ls | grep International_Branches")
+                    file_system="No"
+                    if [[ $file = "International_Branches" ]]
+                    then
+                      file_system="Yes"
+                    fi
+                    # calls recycling script passing ctid, attacker ip, and ctip
+                    /root/Honeypot_Scripts/RecyclingScript.bash $1 $ip $2
+
+                    # calls data collection script with session id and filesystem
+                    python 3.6 /root/Honeypot_Scripts/data_collection.py $session $file_system
             	fi
     	fi
+      
       # if a connection as been made, copies line to Log folder on host
     	if [ $connMade -eq 1 ]
     	then
