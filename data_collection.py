@@ -4,6 +4,7 @@ from attacker_levels import attacker_levels
 from datetime import datetime
 import os
 import subprocess
+from slackclient import SlackClient
 
 # $1 = session id
 # $2 = file system - "yes" or "no"?
@@ -143,7 +144,8 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
 
   
   #channel = "#2c_attackers"
-  #slack_client = SlackClient(token)
+  token = "vvvv"
+  slack_client = SlackClient(token)
   #message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
   
   # forms email message 
