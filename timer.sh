@@ -21,12 +21,12 @@ then
                 iptables --table filter --insert FORWARD --source $3 --destination $2 --in-interface enp4s2 --out-interface vmbr0 --jump DROP
                 file=$(pct exec $1 "ls | grep International_Branches")
                 file_system="No"
-                if [[ $file = "Accepted" ]]
+                if [[ $file = "International_Branches" ]]
                 then
                   file_system="Yes"
                 fi
                 /root/Honeypot_Scripts/RecyclingScript.bash $1 $3 $2
-                /root/Honeypot_Scripts/tailing_script.sh $4 $file_system
+                /root/Honeypot_Scripts/data_collection.py $4 $file_system
                 exit 0
         fi
 fi
