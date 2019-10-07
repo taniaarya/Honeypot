@@ -104,10 +104,9 @@ then
 fi
 
 # iptables rules to prevent attacker re-entry and open the container for connections
-iptables --table filter --delete INPUT --in-interface enp4s2 --source $2 --protocol tcp --destination-port <PORTNUM> --jump ACCEPT
-iptables --table filter --delete INPUT --in-interface enp4s2 --source 0.0.0.0/0 --protocol tcp --destination-port <PORTNUM> --jump DROP
-
-iptables --table filter --insert INPUT 1 --in-interface enp4s2 --source $2 --destination $3 --jump DROP
+#iptables --table filter --delete INPUT --in-interface enp4s2 --source $2 --protocol tcp --destination-port <PORTNUM> --jump ACCEPT
+#iptables --table filter --delete INPUT --in-interface enp4s2 --source 0.0.0.0/0 --protocol tcp --destination-port <PORTNUM> --jump DROP
+#iptables --table filter --insert INPUT 1 --in-interface enp4s2 --source $2 --destination $3 --jump DROP
 
 # Rerun the tailing script **may need an output directory
 nohup /root/Honeypot_Scripts/tailing_script.sh 2>&1 &
