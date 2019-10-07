@@ -5,6 +5,9 @@ from datetime import datetime
 import os
 import subprocess
 
+# $1 = session id
+# $2 = file system yes?
+
 session = sys.argv[1]
 file_system = sys.argv[2]
 
@@ -88,7 +91,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   
   #channel = "#2c_attackers"
   #slack_client = SlackClient(token)
-  message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
+  #message = ":rotating_light::rotating_light: Incoming Attacker :rotating_light::rotating_light:\n"
   message += "Attacker IP: " + str(ip) + "\n"
   message += "File System: " + str(file_system) + "\n"
   message += "Level: " + str(level) + "\n"
