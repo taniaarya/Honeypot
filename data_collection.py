@@ -76,8 +76,11 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
 
       # sets up new command mailing
       if mail_new_command != "":
-        message = ":bookmark_tabs::bookmark_tabs: Y'all be slacking on that dictionary :bookmark_tabs::bookmark_tabs:"
-        response = slack_client.chat_postMessage(channel='#2c_attackers', text=mail_new_command, username="New Command Found")
+        message = ":bookmark::bookmark: Y'all be slacking on that dictionary :bookmark::bookmark:"
+        try:
+          response = slack_client.chat_postMessage(channel='#2c_attackers', text=mail_new_command, username="New Command Found")
+        except:
+          pass
         '''
         execute_new_mail = ["echo", "-e", mail_new_command, "|", "mail", "-s", "New Command Found", EMAIL]
         subprocess.call(execute_new_mail)
@@ -165,8 +168,10 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   message += "Number of Commands: " + str(num_commands) + "\n"
   message += "Commands run: " + "\n".join(command_list)
   #slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
-  response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="Incoming Attacker")
-  
+  try:
+    response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="Incoming Attacker")
+  except:
+    pass
   '''
   # sets up command to send email
   execute_mail = ["echo", "-e", message, "|", "mail", "-s", "Y'all been hacked", EMAIL]
