@@ -167,7 +167,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   message += "Time out: " + str(time_out) + "\n"
   message += "Elapsed Time (sec): " + str(duration_in_s) + "\n"
   message += "Number of Commands: " + str(num_commands) + "\n"
-  message += "Commands run: \n" + "\n\t".join(command_list)
+  message += "Commands run: \n\t" + "\n\t".join(command_list)
   #slack_client.api_call("chat.postMessage", channel=channel, text=message, username="y'all been compromised")
   try:
     response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="Incoming Attacker")
