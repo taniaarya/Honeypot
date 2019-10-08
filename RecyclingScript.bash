@@ -4,8 +4,7 @@
 
 # remember:
 # $1 is the name of the container
-# $2 is the attacker ip address
-# $3 is the container ip address
+# $2 is the container ip address
 
 # signal start of recycling script
 echo "killer starting"
@@ -17,7 +16,7 @@ pkill -f "tailing_script.sh $1"
 pkill -f "tail -f -n 1 var/lib/lxc/$1/rootfs/var/log/auth.log"
 
 # kill the MITM tailing
-pkill -f "node /root/MITM/mitm/index.js HACS200_2C 10000 $3 $1 true mitm.js"
+pkill -f "node /root/MITM/mitm/index.js HACS200_2C 10000 $2 $1 true mitm.js"
 
 # recycle time
 pct stop $1
@@ -50,6 +49,7 @@ pct start $1
 if [ $1 -eq 101 ] 
 then
 	echo -e "root\nroot101" | pct exec 101 passwd
+
 elif [ $1 -eq 102 ]
 then
 	echo -e "root\nroot102" | pct exec 102 passwd
@@ -71,7 +71,21 @@ sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' /var/lib/lxc/
 pct exec $1 service ssh restart
 
 # MITM transition steps
-nohup node /root/MITM/mitm/index.js HACS200_2C 10000 $3 $1 true mitm.js > mitm_file 2>&1 &
+if [ $1 -eq 101 ] 
+then
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10000 172.20.0.2 101 true mitm.js > mitm_file>&1 &
+	
+elif [ $1 -eq 102 ]
+then
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10001 172.20.0.3 102 true mitm.js > mitm_file102>&1 &
+elif [ $1 -eq 103 ] 
+then
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10002 172.20.0.4 103 true mitm.js > mitm_file103>&1 &
+elif [ $1 -eq 104 ] 
+then
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10003 172.20.0.5 104 true mitm.js > mitm_file104>&1 &
+fi
+
 
 # needed this to fix a bug
 pct stop $1 && pct unmount $1
@@ -79,6 +93,7 @@ pct start $1 && pct mount $1
 
 # random number generation determining whether to copy files or not
 randNum=$RANDOM
+file_system="No"
 
 if [ $((randNum%2)) = 0 ] 
 then
@@ -101,6 +116,8 @@ then
 	cp -r /root/Users /var/lib/lxc/$1/rootfs/root/
 	cp -r /root/Volunteering /var/lib/lxc/$1/rootfs/root/
 	cp -r /root/Workspace /var/lib/lxc/$1/rootfs/root/
+
+	file_system="Yes"
 fi
 
 # iptables rules to prevent attacker re-entry and open the container for connections
@@ -109,4 +126,4 @@ fi
 #iptables --table filter --insert INPUT 1 --in-interface enp4s2 --source $2 --destination $3 --jump DROP
 
 # Rerun the tailing script **may need an output directory
-nohup /root/Honeypot_Scripts/tailing_script.sh 2>&1 &
+nohup /root/Honeypot_Scripts/tailing_script.sh $1 $2 $file_system 2>&1 &
