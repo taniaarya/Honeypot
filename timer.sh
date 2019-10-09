@@ -10,6 +10,12 @@
 # kicks attacker out after 1 hour
 sleep 120
 
+# kill the tail script
+pkill -f "tailing_script.sh $1"
+
+# kill the tailing process started by the tailscript
+pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
+
 # adds firewall rules to block out attacker, and re
 iptables --table filter --delete INPUT --source $6 --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
 iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $3 --jump DROP
