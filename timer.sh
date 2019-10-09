@@ -2,32 +2,28 @@
 
 # $1 = ctid
 # $2 = ct ip
-# $3 = attacker ip
-# $4 = MITM session id
+# $3 = mitm port
+# $4 = session id
+# $5 = filesystem
+# $6 = attacker ip
 
-sleep 605
+# kicks attacker out after 1 hour
+sleep 120
 
-if [ -f "/tmp/login_$1" ]
-then
-        startTime=$(tail -1 /tmp/login_$1)
-        endTime=$(date -u +%s)
-        elapsed=$(($endTime-$startTime))
-        $echo "elapsed time is $elapsed"
-        if [ $elapsed -ge 600 ]
-        then
-                rm /tmp/login_$1
-                iptables --table filter --delete FORWARD --source $3 --destination $2 --in-interface enp4s2 --out-interface vmbr0 --jump ACCEPT
-                iptables --table filter --delete FORWARD --protocol tcp --destination $2 --dport 22 --jump DROP
-                iptables --table filter --insert FORWARD --source $3 --destination $2 --in-interface enp4s2 --out-interface vmbr0 --jump DROP
-                file=$(pct exec $1 "ls | grep International_Branches")
-                file_system="No"
-                if [[ $file = "International_Branches" ]]
-                then
-                  file_system="Yes"
-                fi
-                /root/Honeypot_Scripts/RecyclingScript.bash $1 $3 $2
-                /root/Honeypot_Scripts/data_collection.py $4 $file_system
-                exit 0
-        fi
-fi
-exit 0
+# adds firewall rules to block out attacker, and re
+iptables --table filter --delete INPUT --source $6 --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
+iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $3 --jump DROP
+iptables --table filter --insert INPUT --protocol tcp --source $6 --destination 172.20.0.1 --in-interface enp4s1 --dport $3 --jump DROP
+#iptables --table filter --insert FORWARD --protocol tcp --source $6 --destination $2 --dport 22 --jump DROP
+
+
+# calls recycling script passing ctid, ctip, and mitm port
+/root/Honeypot_Scripts/recycling_script.sh $1 $2 $3 &
+
+# calls data collection script with session id and filesystem
+/root/Honeypot_Scripts/call_data_collection.sh $4 $5 &
+
+# makes sure disk space is good
+/root/Honeypot_Scripts/check_health.sh &
+
+
