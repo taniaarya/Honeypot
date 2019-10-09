@@ -104,7 +104,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     #fi
                     
                     # calls recycling script passing ctid, attacker ip, and ctip
-                    /root/Honeypot_Scripts/recycling_script.sh $1 $ip $2 $4
+                    /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4
 
                     # calls data collection script with session id and filesystem
                     python3.6 /root/Honeypot_Scripts/data_collection.py $session $3
