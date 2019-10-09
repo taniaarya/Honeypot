@@ -76,7 +76,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
 
       # sets up new command mailing
   if mail_new_command != "":
-    message = ":bookmark::bookmark: Y'all be slacking on that dictionary :bookmark::bookmark:\n\t"
+    message = ":bookmark::bookmark: Y'all be slacking on that dictionary :bookmark::bookmark:\n"
     message += "New Commands Found: \n\t"
     message += mail_new_command + "\n\t"
     try:
