@@ -16,6 +16,9 @@ pkill -f "tailing_script.sh $1"
 # kill the tailing process started by the tailscript
 pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 
+# kill the timer
+pkill -f "timer.sh $1"
+
 echo "The mitm port is $3"
 
 echo "Trying to kill: node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
