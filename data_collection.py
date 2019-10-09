@@ -42,6 +42,9 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   command_list = []
   level = 0
 
+  # checks if new command exists and researchers needs to be notified
+  mail_new_command = ""
+
   # loops and process lines of file
   for line in lines:
     # we only want to process lines with the full output of the user's commands, not the keystrokes
@@ -52,9 +55,6 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
       command = command[command.find("#")+2:]
       # if the user used a pip to connect multiple commands, counts them as individual commands
       commands = command.split("|")
-
-      # checks if new command exists and researchers needs to be notified
-      mail_new_command = ""
 
       for com in commands:
         # removes extraneous hex characters and adds to master list of commands
@@ -72,20 +72,20 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
             found_key = True
         # if the command run matches none of the commands in the dictionary, mails it to researchers
         if not found_key:
-          mail_new_command += "{}\n".format(com)
+          mail_new_command += "{}\n\t".format(com)
 
       # sets up new command mailing
-      if mail_new_command != "":
-        message = ":bookmark::bookmark: Y'all be slacking on that dictionary :bookmark::bookmark:\n\t"
-        message += mail_new_command + "\n\t"
-        try:
-          response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="New Command Found")
-        except:
-          pass
-        '''
-        execute_new_mail = ["echo", "-e", mail_new_command, "|", "mail", "-s", "New Command Found", EMAIL]
-        subprocess.call(execute_new_mail)
-        '''
+  if mail_new_command != "":
+    message = ":bookmark::bookmark: Y'all be slacking on that dictionary :bookmark::bookmark:\n\t"
+    message += mail_new_command + "\n\t"
+    try:
+      response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="New Command Found")
+    except:
+      pass
+  '''
+  execute_new_mail = ["echo", "-e", mail_new_command, "|", "mail", "-s", "New Command Found", EMAIL]
+  subprocess.call(execute_new_mail)
+  '''
   
   # attacker is level 1 if no commands are run
   if len(command_list) == 0:
