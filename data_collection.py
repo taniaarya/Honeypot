@@ -14,7 +14,7 @@ session = sys.argv[1]
 file_system = sys.argv[2]
 
 # stores email to be sent
-EMAIL = os.getenv('HP_EMAIL')
+#EMAIL = os.getenv('HP_EMAIL')
 
 # gets slack token
 TOKEN = os.getenv('SLACK_TOKEN')
