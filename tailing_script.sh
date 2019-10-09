@@ -92,7 +92,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     # adds firewall rules to block out attacker, and re
                     iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
                     iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
-                    iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --dport $4 --jump DROP
+                    iptables --table filter --insert INPUT --protocol tcp --source $ip --destination 172.20.0.1 --in-interface enp4s1 --dport $4 --jump DROP
 
                     # checks if the self-created directories exist on the container to determine whether or not container had filesystem installed
                     

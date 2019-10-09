@@ -18,8 +18,9 @@ pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 
 echo "The mitm port is $3"
 
+echo "Trying to kill: node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 # kill the MITM tailing
-pkill -f "node /root/MITM/mitm/index.js $3 HACS200_2C $2 $1 true mitm.js"
+pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 
 # recycle time
 pct stop $1
