@@ -19,8 +19,6 @@ session="" # mitm session id
 # tails auth.log file and reads every new line
 tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
       
-      echo "$a"
-      
       accept=$(echo "$a" | awk -F" " '{print $6}') # checks for keyword "Accepted"
       closed=$(echo "$a" | awk -F" " '{print $6,$7,$8}') #checks for keyword "pam_unix(sshd:session): session closed"
     	
@@ -62,9 +60,12 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                   #pkill -f "timer $1"
 
                   # removes rules in case of overlap
-                  iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
-                  iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
-                  # addes firewall rules to drop all ssh traffic except for attacker ip
+		  if [ $connMade -eq 0 ]
+	          then
+                  	iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
+                  	iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
+		  fi
+		  # addes firewall rules to drop all ssh traffic except for attacker ip
                   iptables --table filter --insert INPUT 6 --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
                   iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
             	fi
@@ -91,7 +92,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     # adds firewall rules to block out attacker, and re
                     iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
                     iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
-                    iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump DROP
+                    iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --dport $4 --jump DROP
 
                     # checks if the self-created directories exist on the container to determine whether or not container had filesystem installed
                     
@@ -103,7 +104,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     #fi
                     
                     # calls recycling script passing ctid, attacker ip, and ctip
-                    /root/Honeypot_Scripts/recycling_script.sh $1 $ip $2
+                    /root/Honeypot_Scripts/recycling_script.sh $1 $ip $2 $4
 
                     # calls data collection script with session id and filesystem
                     python3.6 /root/Honeypot_Scripts/data_collection.py $session $3
@@ -114,6 +115,5 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
     	if [ $connMade -eq 1 ]
     	then
             	echo "$a" >> /root/Logs/$1/$timestamp
-		echo "sent line to log file"
     	fi
 done

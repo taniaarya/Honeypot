@@ -5,6 +5,7 @@
 # remember:
 # $1 is the name of the container
 # $2 is the container ip address
+# $3 is the MITM port
 
 # signal start of recycling script
 echo "killer starting"
@@ -13,10 +14,12 @@ echo "killer starting"
 pkill -f "tailing_script.sh $1"
 
 # kill the tailing process started by the tailscript
-pkill -f "tail -f -n 1 var/lib/lxc/$1/rootfs/var/log/auth.log"
+pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
+
+echo "The mitm port is $3"
 
 # kill the MITM tailing
-pkill -f "node /root/MITM/mitm/index.js HACS200_2C 10000 $2 $1 true mitm.js"
+pkill -f "node /root/MITM/mitm/index.js $3 HACS200_2C $2 $1 true mitm.js"
 
 # recycle time
 pct stop $1
@@ -122,4 +125,4 @@ fi
 #iptables --table filter --insert INPUT 1 --in-interface enp4s2 --source $2 --destination $3 --jump DROP
 
 # Rerun the tailing script **may need an output directory
-nohup /root/Honeypot_Scripts/tailing_script.sh $1 $2 $file_system 2>&1 &
+nohup /root/Honeypot_Scripts/tailing_script.sh $1 $2 $file_system $3 2>&1 &
