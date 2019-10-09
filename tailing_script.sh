@@ -93,6 +93,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
                     iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
                     iptables --table filter --insert INPUT --protocol tcp --source $ip --destination 172.20.0.1 --in-interface enp4s1 --dport $4 --jump DROP
+		    #iptables --table filter --insert FORWARD --protocol tcp --source $ip --destination $2 --dport 22 --jump DROP
 
                     # checks if the self-created directories exist on the container to determine whether or not container had filesystem installed
                     
@@ -108,6 +109,9 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
 
                     # calls data collection script with session id and filesystem
                     /root/Honeypot_Scripts/call_data_collection.sh $session $3 &
+
+		    # makes sure disk space is good
+		    /root/Honeypot_Scripts/check_health.sh &
             	fi
     	fi
 
