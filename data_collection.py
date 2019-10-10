@@ -5,9 +5,12 @@ from datetime import datetime
 import os
 import subprocess
 import slack
+import time
 
 # $1 = session id
 # $2 = file system - "yes" or "no"?
+
+time.sleep(300)
 
 # Stores command line arguments in variables
 session = sys.argv[1]
