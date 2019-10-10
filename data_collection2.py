@@ -6,6 +6,7 @@ import os
 import subprocess
 import slack
 import time
+import re
 
 # $1 = session id
 # $2 = file system - "yes" or "no"?
@@ -44,10 +45,12 @@ slack_client = slack.WebClient(token=TOKEN)
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
 # unsips and opens session file
-with gunzip.open(filepath, "rt", encoding="utf-8") as file:
+with gzip.open(filepath, "rt", encoding="utf-8") as file:
   line = file.readline()
   while line:
-    # blah
+    #ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+    #line = ansi_escape.sub('', line)
+    #line = line.replace("\x08", "").replace("\x07", "").strip()
     if "Date: " in line:
       # extracts date from 8th line in YYYY-MM-DD format
       date = line.split(" ")[1]
@@ -55,6 +58,10 @@ with gunzip.open(filepath, "rt", encoding="utf-8") as file:
       time_in = line.split(" ")[-1][:-5]
 
     elif identifier in line:
+      ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+      line = ansi_escape.sub('', line)
+      line = line.replace("\x08", "").replace("\x07", "").strip() 
+      print(line)
       command = line.split(identifier)[-1].rstrip()
       # removes current directory and preceding characters from parsed command
       command = command[command.find("#")+2:]
@@ -83,6 +90,8 @@ with gunzip.open(filepath, "rt", encoding="utf-8") as file:
   # attacker is level 1 if no commands are run
   if len(command_list) == 0:
     level = 1
+
+  print(command_list)
 
   # gets number of commands run
   num_commands = len(command_list)
@@ -136,7 +145,7 @@ with gunzip.open(filepath, "rt", encoding="utf-8") as file:
   execute.append("-d")
   
   # builds list of entries that will be uploaded to the sheet
-  last_half_list = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
+  last_half_list = [str(ctid), str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
   # separates each entry by a comma
   last_half = ",".join(last_half_list)
   execute.append(last_half)
