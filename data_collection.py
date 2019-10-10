@@ -196,6 +196,7 @@ except:
     message += "Attacker IP: " + str(ip) + "\n"
     message += "File System: " + str(file_system) + "\n"
     message += "Time out: " + str(time_out) + "\n"
+    message += "MITM Session ID: " + str(session) + "\n"
     response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="MITM Data Not Collected")
   except:
     print(response)
