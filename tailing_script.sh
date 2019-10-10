@@ -38,7 +38,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                 echo "The timestamp is $timestamp"
                 # makes directory to store auth.log file in
                 mkdir -p /root/Logs/$1/
-                /root/Honeypot_Scripts/timer.sh $1 $2 $4 $session $3 $ip &
+                /root/Honeypot_Scripts/timer.sh $1 $2 $4 $session $3 $ip > /root/Logs/timer$1>&1 &
             	fi
 
               # increases connection count
