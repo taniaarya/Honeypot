@@ -89,7 +89,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4 &
 
                     # calls data collection script with session id and filesystem, ctid, attacker ip
-                    /root/Honeypot_Scripts/call_data_collection.sh $session $3 $2 $ip $disConnTime &
+                    /root/Honeypot_Scripts/call_data_collection.sh $session $3 $1 $ip $disConnTime &
 
 		    # makes sure disk space is good
 		    /root/Honeypot_Scripts/check_health.sh &

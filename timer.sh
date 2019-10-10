@@ -7,7 +7,7 @@
 # $5 = filesystem
 # $6 = attacker ip
 
-# kicks attacker out after 1 hour
+# kicks attacker out after 30 minutes
 sleep 60
 
 # kill the tail script
@@ -18,7 +18,7 @@ pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 
 disConnTime=$(date +%H:%M:%S)
 # adds firewall rules to block out attacker, and re
-iptables --table filter --delete INPUT --source $6 --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
+iptables --table filter --delete INPUT --source $6 --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $3 --jump ACCEPT
 iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $3 --jump DROP
 iptables --table filter --insert INPUT --protocol tcp --source $6 --destination 172.20.0.1 --in-interface enp4s1 --dport $3 --jump DROP
 #iptables --table filter --insert FORWARD --protocol tcp --source $6 --destination $2 --dport 22 --jump DROP
