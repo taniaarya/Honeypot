@@ -2,7 +2,7 @@
 
 date=$(/bin/date)
 
-log_params=""
+log_params="$date"
 
 # Proxmox
 
