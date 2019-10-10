@@ -2,6 +2,9 @@
 
 pkill node
 pkill tail
+pkill data_coll
+pkill timer
+pkill recy
 
 /root/Honeypot_Project/firewall/firewall_rules.sh
 

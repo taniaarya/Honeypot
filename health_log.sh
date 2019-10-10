@@ -31,7 +31,6 @@ for val in ${ctids[@]}; do
   cram=$(/usr/sbin/pct exec 101 -- /usr/bin/free --mega | /bin/grep Mem | /usr/bin/awk '{print $7}')
   log_params="${log_params},$cram"
   cdisk=$(/usr/sbin/pct exec 101 -- /bin/df -BM --total | /bin/grep total | /usr/bin/awk '{print $4}')
-  log_params="${log_params},$cdisk"
   cdisk_length=$(/usr/bin/expr length $cdisk)
   cdisk_length=$((cdisk_length-1))
   cdisk=$(/bin/echo $cdisk | /usr/bin/cut -c1-$cdisk_length)

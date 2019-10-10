@@ -8,7 +8,7 @@
 # $6 = attacker ip
 
 # kicks attacker out after 1 hour
-sleep 1800
+sleep 60
 
 # kill the tail script
 pkill -f "tailing_script.sh $1"
