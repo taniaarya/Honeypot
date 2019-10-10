@@ -13,7 +13,7 @@ import time
 # $4 = sttacker ip
 # $5 = time_out
 
-time.sleep(300)
+#time.sleep(300)
 
 # Stores command line arguments in variables
 session = sys.argv[1]
@@ -21,10 +21,6 @@ file_system = sys.argv[2]
 ctid = sys.argv[3]
 ip = sys.argv[4]
 time_out = sys.argv[5]
-
-# gets slack token
-TOKEN = os.getenv('SLACK_TOKEN')
-slack_client = slack.WebClient(token=TOKEN)
 
 identifier = "root@CT{}:".format(ctid)
 date = ""
@@ -47,11 +43,8 @@ slack_client = slack.WebClient(token=TOKEN)
 # filepath for MITM sessions (uses argument given)
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
-file = subprocess.check_output(['zcat', filepath])
-print(file)
-
-""" # unsips and opens session file
-with gzip.open(filepath, "rt", encoding="utf-8") as file:
+# unsips and opens session file
+with gunzip.open(filepath, "rt", encoding="utf-8") as file:
   line = file.readline()
   while line:
     # blah
@@ -179,12 +172,4 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
       response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="New Command Found")
     except:
       print(response)
-      pass """
-
-
-
-  
-
-
-
-  
+      pass 
