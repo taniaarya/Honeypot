@@ -6,15 +6,33 @@ import os
 import subprocess
 import slack
 import time
+import re
 
 # $1 = session id
 # $2 = file system - "yes" or "no"?
+# $3 = ctid
+# $4 = sttacker ip
+# $5 = time_out
 
-time.sleep(300)
+#time.sleep(300)
 
 # Stores command line arguments in variables
 session = sys.argv[1]
 file_system = sys.argv[2]
+ctid = sys.argv[3]
+ip = sys.argv[4]
+time_out = sys.argv[5]
+
+identifier = "root@CT{}:".format(ctid)
+date = ""
+time_in = ""
+
+command_list = []
+level = 0
+
+# checks if new command exists and researchers needs to be notified
+mail_new_command = ""
+
 
 # stores email to be sent
 #EMAIL = os.getenv('HP_EMAIL')
@@ -28,31 +46,22 @@ filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
 # unsips and opens session file
 with gzip.open(filepath, "rt", encoding="utf-8") as file:
-  lines = file.readlines()
-  # takes third line of mitm file with container ID, removes whitespaces, and extracts ctid
-  ctid = lines[2].rstrip().split("Container ID: ")[-1]
-  identifier = "root@CT{}:".format(ctid)
-  
-  # extracts attacker ip address from 4th line of mitm file
-  ip = lines[3].split("Attacker IP Address: ")[-1].rstrip()
-  
-  # extracts date from 8th line in YYYY-MM-DD format
-  date = lines[7].split(" ")[1]
-  
-  # extracts time in 24 hr HH:MM:SS format (cuts off extraneous seconds)
-  time_in = lines[7].split(" ")[-1][:-5] 
-  
-  command_list = []
-  level = 0
+  line = file.readline()
+  while line:
+    #ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+    #line = ansi_escape.sub('', line)
+    #line = line.replace("\x08", "").replace("\x07", "").strip()
+    if "Date: " in line:
+      # extracts date from 8th line in YYYY-MM-DD format
+      date = line.split(" ")[1]
+      # extracts time in 24 hr HH:MM:SS format (cuts off extraneous seconds)
+      time_in = line.split(" ")[-1][:-5]
 
-  # checks if new command exists and researchers needs to be notified
-  mail_new_command = ""
-
-  # loops and process lines of file
-  for line in lines:
-    # we only want to process lines with the full output of the user's commands, not the keystrokes
-    if identifier in line:
-      # extracts command from line
+    elif identifier in line:
+      ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+      line = ansi_escape.sub('', line)
+      line = line.replace("\x08", "").replace("\x07", "").strip() 
+      print(line)
       command = line.split(identifier)[-1].rstrip()
       # removes current directory and preceding characters from parsed command
       command = command[command.find("#")+2:]
@@ -76,30 +85,16 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
         # if the command run matches none of the commands in the dictionary, mails it to researchers
         if not found_key:
           mail_new_command += "{}\n\t".format(com)
+    line = file.readline()
 
-      # sets up new command mailing
-  if mail_new_command != "":
-    message = ":bookmark::bookmark: Y'all be slacking on that dictionary :bookmark::bookmark:\n"
-    message += "New Commands Found: \n\t"
-    message += mail_new_command + "\n\t"
-    try:
-      response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="New Command Found")
-    except:
-      pass
-  '''
-  execute_new_mail = ["echo", "-e", mail_new_command, "|", "mail", "-s", "New Command Found", EMAIL]
-  subprocess.call(execute_new_mail)
-  '''
-  
   # attacker is level 1 if no commands are run
   if len(command_list) == 0:
     level = 1
 
+  print(command_list)
+
   # gets number of commands run
   num_commands = len(command_list)
-
-  # extracts time out from last line of file 
-  time_out = lines[-1].split(" ")[1][:-1][:-4]
 
   # converts string time to datetime object in order to calculate elapsed time
   datetime_in = datetime.strptime(time_in, "%H:%M:%S")
@@ -150,7 +145,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
   execute.append("-d")
   
   # builds list of entries that will be uploaded to the sheet
-  last_half_list = [str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
+  last_half_list = [str(ctid), str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
   # separates each entry by a comma
   last_half = ",".join(last_half_list)
   execute.append(last_half)
@@ -177,16 +172,13 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
     response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="Incoming Attacker")
   except:
     pass
-  '''
-  # sets up command to send email
-  execute_mail = ["echo", "-e", message, "|", "mail", "-s", "Y'all been hacked", EMAIL]
-  # sends email
-  subprocess.call(execute_mail)
-  '''
 
-
-  
-
-
-
-  
+  if mail_new_command != "":
+    message = ":bookmark::bookmark: Y'all be slacking on that dictionary :bookmark::bookmark:\n"
+    message += "New Commands Found: \n\t"
+    message += mail_new_command + "\n\t"
+    try:
+      response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="New Command Found")
+    except:
+      print(response)
+      pass 
