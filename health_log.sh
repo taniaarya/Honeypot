@@ -38,14 +38,16 @@ for val in ${ctids[@]}; do
   log_params="${log_params},$cdisk"
   cload=$(/usr/sbin/pct exec 101 -- /usr/bin/uptime | /usr/bin/awk '{print $NF}')
   log_params="${log_params},$cload"
-  crxkb=$(/usr/sbin/pct exec 101 -- /sbin/ifconfig eth0 | /bin/grep RX| /usr/bin/awk 'NR==2{print $3}')
-  crxkb_length=$(/usr/bin/expr length $crxkb)
-  crxkb=$(/bin/echo $crxkb | /usr/bin/cut -c2-$crxkb_length)
-  log_params="${log_params},$crxkb"
-  ctxkb=$(/usr/sbin/pct exec 101 -- /sbin/ifconfig eth0 | /bin/grep TX | /usr/bin/awk 'NR==2{print $7}')
-  ctxkb_length=$(/usr/bin/expr length $ctxkb)
-  ctxkb=$(/bin/echo $ctxkb | /usr/bin/cut -c2-$ctxkb_length) 
-  log_params="${log_params},$ctxkb"
+
+  #crxkb=$(/usr/sbin/pct exec 101 -- /sbin/ifconfig eth0 | /bin/grep RX| /usr/bin/awk 'NR==2{print $3}')
+  #crxkb_length=$(/usr/bin/expr length $crxkb)
+  #crxkb=$(/bin/echo $crxkb | /usr/bin/cut -c2-$crxkb_length)
+  #log_params="${log_params},$crxkb"
+  #ctxkb=$(/usr/sbin/pct exec 101 -- /sbin/ifconfig eth0 | /bin/grep TX | /usr/bin/awk 'NR==2{print $7}')
+  #ctxkb_length=$(/usr/bin/expr length $ctxkb)
+  #ctxkb=$(/bin/echo $ctxkb | /usr/bin/cut -c2-$ctxkb_length) 
+  #log_params="${log_params},$ctxkb"
+
 done
 
 log -k /root/Honeypot_Scripts/hacs.json -s https://docs.google.com/spreadsheets/d/10WP00Gvlu2ZmFNLv0u0APAG0IhS1JBWdGjQpifkqGAM/edit#gid=0 -d "$log_params"
