@@ -47,7 +47,10 @@ slack_client = slack.WebClient(token=TOKEN)
 # filepath for MITM sessions (uses argument given)
 filepath = "/root/MITM_data/sessions/{}.gz".format(session)
 
-# unsips and opens session file
+file = subprocess.check_output(['zcat', filepath])
+print(file)
+
+""" # unsips and opens session file
 with gzip.open(filepath, "rt", encoding="utf-8") as file:
   line = file.readline()
   while line:
@@ -176,7 +179,7 @@ with gzip.open(filepath, "rt", encoding="utf-8") as file:
       response = slack_client.chat_postMessage(channel='#2c_attackers', text=message, username="New Command Found")
     except:
       print(response)
-      pass
+      pass """
 
 
 
