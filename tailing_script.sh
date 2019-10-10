@@ -15,6 +15,7 @@ conn="" # checks if auth.log shows attacker is "accepted" or "disconnected"
 ip=0 # attacker ip
 timestamp="test" # timestamp of attacker entry
 session="" # mitm session id
+disConnTime = ""
 
 # tails auth.log file and reads every new line
 tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
@@ -77,6 +78,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
               # checks if this was the last connection
             	if [ $numConn -eq 0 ] && [ $connMade -eq 1 ]
             	then
+                    disConnTime=$(echo "$a" | awk -F" " '{print $3}')
                     # adds firewall rules to block out attacker, and re
                     iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --jump ACCEPT
                     iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
@@ -87,7 +89,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4 &
 
                     # calls data collection script with session id and filesystem, ctid, attacker ip
-                    /root/Honeypot_Scripts/call_data_collection.sh $session $3 $2 $ip &
+                    /root/Honeypot_Scripts/call_data_collection.sh $session $3 $2 $ip $disConnTime &
 
 		    # makes sure disk space is good
 		    /root/Honeypot_Scripts/check_health.sh &
