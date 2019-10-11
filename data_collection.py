@@ -14,7 +14,7 @@ import re
 # $4 = sttacker ip
 # $5 = time_out
 
-time.sleep(300)
+time.sleep(60)
 
 # Stores command line arguments in variables
 session = sys.argv[1]
