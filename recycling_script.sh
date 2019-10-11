@@ -22,12 +22,10 @@ pkill -f "timer.sh $1"
 
 echo "The mitm port is $3"
 
-echo "Trying to kill: node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
-echo "$1$2$3"
 # kill the MITM tailing
 pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 
-# adds firewall rules to block out attacker, and re
+# adds firewall rules to block out attacker, and reallow other attackers
 iptables --table filter --delete INPUT --source $4 --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $3 --jump ACCEPT
 iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $3 --jump DROP
 iptables --table filter --insert INPUT --protocol tcp --source $4 --destination 172.20.0.1 --in-interface enp4s1 --dport $3 --jump DROP

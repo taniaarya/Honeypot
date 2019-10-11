@@ -19,7 +19,7 @@ pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 disConnTime=$(date +%H:%M:%S)
 
 # calls recycling script passing ctid, ctip, and mitm port
-/root/Honeypot_Scripts/recycling_script.sh $1 $2 $3 &
+/root/Honeypot_Scripts/recycling_script.sh $1 $2 $3 $6 &
 
 # calls data collection script with session id and filesystem, ctid, attacker ip
 /root/Honeypot_Scripts/call_data_collection.sh $4 $5 $1 $6 $disConnTime &
