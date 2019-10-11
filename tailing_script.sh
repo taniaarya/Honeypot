@@ -79,14 +79,9 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
             	if [ $numConn -eq 0 ] && [ $connMade -eq 1 ]
             	then
                     disConnTime=$(echo "$a" | awk -F" " '{print $3}')
-                    # adds firewall rules to block out attacker, and re
-                    iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
-                    iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
-                    iptables --table filter --insert INPUT --protocol tcp --source $ip --destination 172.20.0.1 --in-interface enp4s1 --dport $4 --jump DROP
-		    #iptables --table filter --insert FORWARD --protocol tcp --source $ip --destination $2 --dport 22 --jump DROP
                                      
                     # calls recycling script passing ctid, ctip, and mitm port
-                    /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4 &
+                    /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4 $ip &
 
                     # calls data collection script with session id and filesystem, ctid, attacker ip
                     /root/Honeypot_Scripts/call_data_collection.sh $session $3 $1 $ip $disConnTime &
