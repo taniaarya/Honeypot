@@ -52,18 +52,18 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                   echo "Adding rules"
 
                   # removes rules in case of overlap
-		          if [ $connMade -eq 0 ]
-	            then
-                  	iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
-                  	iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
-		          fi
-		          # addes firewall rules to drop all ssh traffic except for attacker ip
-              iptables --table filter --insert INPUT 5 --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
-              iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
+		              if [ $connMade -ne 0 ]
+	                then
+                  	  iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
+                  	  iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
+		              fi
+                  # addes firewall rules to drop all ssh traffic except for attacker ip
+                  iptables --table filter --insert INPUT 5 --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
+                  iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
 
-              # sets boolean to true
-              connMade=1
-        fi
+                  # sets boolean to true
+                  connMade=1
+              fi
 
       # checks if the attacker has disconnected
     	elif [[ $closed = "pam_unix(sshd:session): session closed" ]]
