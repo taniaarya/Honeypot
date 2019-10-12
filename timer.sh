@@ -10,6 +10,9 @@
 # kicks attacker out after 30 minutes
 sleep 60
 
+# time attacker is kicked out
+disConnTime=$(date +%H:%M:%S)
+
 # kill the tail script
 pkill -f "tailing_script.sh $1"
 
@@ -19,12 +22,11 @@ pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 echo "killing node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 
+# allows mitm process to be fully killed before adding firewall rules
 sleep 10
 
-ps_aux=$(ps aux | grep node)
-echo "$ps_aux"
-
-disConnTime=$(date +%H:%M:%S)
+#ps_aux=$(ps aux | grep node)
+#echo "$ps_aux"
 
 # calls recycling script passing ctid, ctip, and mitm port
 echo "calling recyling /root/Honeypot_Scripts/recycling_script.sh $1 $2 $3 $6"

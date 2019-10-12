@@ -58,7 +58,7 @@ try:
         # extracts time in 24 hr HH:MM:SS format (cuts off extraneous seconds)
         time_in = line.split(" ")[-1][:-5]
 
-      elif identifier in line and "Attacker Stream Below" not in line:
+      elif identifier in line and "Attacker Stream Below" not in line and "Attacker Keystrokes" not in line:
         ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
         line = ansi_escape.sub('', line)
         line = line.replace("\x08", "").replace("\x07", "").strip() 

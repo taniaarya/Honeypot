@@ -45,8 +45,6 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
               # increases connection count
               numConn=$((numConn+1))
             	echo "Accepted: numConn is $numConn"
-              # sets boolean to true
-              connMade=1
             	
               # checks if this is the only connection to add respective ip rules
               if [ $numConn -eq 1 ]
@@ -54,15 +52,18 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                   echo "Adding rules"
 
                   # removes rules in case of overlap
-		  if [ $connMade -eq 0 ]
-	          then
+		          if [ $connMade -eq 0 ]
+	            then
                   	iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
                   	iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
-		  fi
-		  # addes firewall rules to drop all ssh traffic except for attacker ip
-                  iptables --table filter --insert INPUT 5 --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
-                  iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
-            	fi
+		          fi
+		          # addes firewall rules to drop all ssh traffic except for attacker ip
+              iptables --table filter --insert INPUT 5 --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
+              iptables --table filter --insert INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
+
+              # sets boolean to true
+              connMade=1
+        fi
 
       # checks if the attacker has disconnected
     	elif [[ $closed = "pam_unix(sshd:session): session closed" ]]
@@ -73,8 +74,8 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
             	then
                         numConn=$((numConn-1))
             	fi
-		echo "Disconnected: numConn is $numConn"
-		echo "connMade: $connMade"
+		          echo "Disconnected: numConn is $numConn"
+		          echo "connMade: $connMade"
               # checks if this was the last connection
             	if [ $numConn -eq 0 ] && [ $connMade -eq 1 ]
             	then
@@ -86,9 +87,9 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                     # calls data collection script with session id and filesystem, ctid, attacker ip
                     /root/Honeypot_Scripts/call_data_collection.sh $session $3 $1 $ip $disConnTime &
 
-		    # makes sure disk space is good
-		    /root/Honeypot_Scripts/check_health.sh &
-            	fi
+		                # makes sure disk space is good
+		                /root/Honeypot_Scripts/check_health.sh &
+             fi
     	fi
 
       # if a connection as been made, copies line to Log folder on host
