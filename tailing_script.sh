@@ -78,7 +78,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
               # checks if this was the last connection
             	if [ $numConn -eq 0 ] && [ $connMade -eq 1 ]
             	then
-                    disConnTime=$(echo "$a" | awk -F" " '{print $3}')
+                    disConnTime=$(date +%H:%M:%S)
                                      
                     # calls recycling script passing ctid, ctip, and mitm port
                     /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4 $ip &
