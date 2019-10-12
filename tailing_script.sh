@@ -54,7 +54,7 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
                   echo "Adding rules"
 
                   # removes rules in case of overlap
-		  if [ $connMade -ne 0 ]
+		  if [ $connMade -eq 0 ]
 	          then
                   	iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $4 --jump DROP
                   	iptables --table filter --delete INPUT --source $ip --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $4 --jump ACCEPT
