@@ -15,7 +15,7 @@ conn="" # checks if auth.log shows attacker is "accepted" or "disconnected"
 ip=0 # attacker ip
 timestamp="test" # timestamp of attacker entry
 session="" # mitm session id
-disConnTime = ""
+disConnTime=""
 
 # tails auth.log file and reads every new line
 tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
