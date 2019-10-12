@@ -16,6 +16,8 @@ pkill -f "tailing_script.sh $1"
 # kill the tailing process started by the tailscript
 pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 
+pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
+
 disConnTime=$(date +%H:%M:%S)
 
 # calls recycling script passing ctid, ctip, and mitm port
