@@ -104,26 +104,6 @@ try:
     # calculates elapsed time in seconds
     duration_in_s = elapsed_time.total_seconds()
     
-    '''
-    # rough parsing of individual commands run
-    parsed_command_list = []
-    for command in command_list:
-      parsed_command_list.append(command.split(" ")[0])
-    '''
-
-    '''
-    # print statements for debugging
-    print("CTID: {}".format(ctid))
-    print("IP: {}".format(ip))
-    print("Date: {}".format(date))
-    print("Time in: {}".format(time_in))
-    print("Time out: {}".format(time_out))
-    print("Elapsed time (min): {}".format(duration_in_s))
-    print("Num commands: {}".format(num_commands))
-    print("Level: {}".format(level))
-    print("Commands run: {}".format(command_list))
-    '''
-    
     # creates string version of command list separated by " : "
     str_list = ' : '.join(command_list)
 
