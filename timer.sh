@@ -16,7 +16,13 @@ pkill -f "tailing_script.sh $1"
 # kill the tailing process started by the tailscript
 pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 
+echo "killing node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
+
+sleep 10
+
+ps_aux=$(ps aux | grep node)
+echo "$ps_aux"
 
 disConnTime=$(date +%H:%M:%S)
 
