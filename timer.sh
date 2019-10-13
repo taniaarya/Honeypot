@@ -8,7 +8,7 @@
 # $6 = attacker ip
 
 # kicks attacker out after 30 minutes
-sleep 60
+sleep 1800
 
 # time attacker is kicked out
 disConnTime=$(date +%H:%M:%S)
