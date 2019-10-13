@@ -66,6 +66,7 @@ try:
         command = line.split(identifier)[-1].rstrip()
         # removes current directory and preceding characters from parsed command
         command = command[command.find("#")+2:]
+        command = command[command.find("$")+2:]
         # if the user used a pip to connect multiple commands, counts them as individual commands
         commands = command.split("|")
 
