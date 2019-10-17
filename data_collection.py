@@ -58,12 +58,15 @@ try:
         # extracts time in 24 hr HH:MM:SS format (cuts off extraneous seconds)
         time_in = line.split(" ")[-1][:-5]
 
-      elif identifier in line and "Attacker Stream Below" not in line and "Attacker Keystrokes" not in line:
+      elif identifier in line and "Attacker Stream Below" not in line and "Attacker Keystrokes" not in line or "Noninteractive mode attacker command:" in line:
         ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
         line = ansi_escape.sub('', line)
         line = line.replace("\x08", "").replace("\x07", "").strip() 
         print(line)
-        command = line.split(identifier)[-1].rstrip()
+        if "Noninteractive mode attacker command:" in line:
+          command = line.split("Noninteractive mode attacker command: ")[-1].rstrip()
+        else:
+          command = line.split(identifier)[-1].rstrip()
         # removes current directory and preceding characters from parsed command
         if("~#" in command):  
           command = command[command.find("#")+2:]
