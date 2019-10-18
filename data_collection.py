@@ -133,7 +133,7 @@ try:
     execute.append("-d")
     
     # builds list of entries that will be uploaded to the sheet
-    last_half_list = [str(ctid), str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list)]
+    last_half_list = [str(ctid), str(file_system), str(ip), str(date), str(time_in), str(time_out), str(duration_in_s), str(num_commands), str(level), str(str_list), str(session)]
     # separates each entry by a comma
     last_half = ",".join(last_half_list)
     execute.append(last_half)
