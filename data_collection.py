@@ -58,6 +58,11 @@ try:
         # extracts time in 24 hr HH:MM:SS format (cuts off extraneous seconds)
         time_in = line.split(" ")[-1][:-5]
 
+      elif "Attacker IP Address: " in line:
+        mitm_ip = line.split("Attacker IP Address: ")[-1].rstrip()
+        if ip != mitm_ip:
+          ip = mitm_ip
+
       elif identifier in line and "Attacker Stream Below" not in line and "Attacker Keystrokes" not in line or "Noninteractive mode attacker command:" in line:
         ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
         line = ansi_escape.sub('', line)
