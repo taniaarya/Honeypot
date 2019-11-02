@@ -87,16 +87,16 @@ mkdir -p /root/Logs/MITM_$1/
 # MITM transition steps
 if [ $1 -eq 101 ] 
 then
-	nohup node /root/MITM/mitm/index.js HACS200_2C 10000 172.20.0.2 101 true mitm.js >> /root/Logs/MITM/$timestamp>&1 &
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10000 172.20.0.2 101 true mitm.js >> /root/Logs/MITM_$1/$timestamp>&1 &
 elif [ $1 -eq 102 ]
 then
-	nohup node /root/MITM/mitm/index.js HACS200_2C 10001 172.20.0.3 102 true mitm.js >> /root/Logs/MITM/$timestamp>&1 &
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10001 172.20.0.3 102 true mitm.js >> /root/Logs/MITM_$1/$timestamp>&1 &
 elif [ $1 -eq 103 ] 
 then
-	nohup node /root/MITM/mitm/index.js HACS200_2C 10002 172.20.0.4 103 true mitm.js >> /root/Logs/MITM/$timestamp>&1 &
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10002 172.20.0.4 103 true mitm.js >> /root/Logs/MITM_$1/$timestamp>&1 &
 elif [ $1 -eq 104 ] 
 then
-	nohup node /root/MITM/mitm/index.js HACS200_2C 10003 172.20.0.5 104 true mitm.js >> /root/Logs/MITM/$timestamp>&1 &
+	nohup node /root/MITM/mitm/index.js HACS200_2C 10003 172.20.0.5 104 true mitm.js >> /root/Logs/MITM_$1/$timestamp>&1 &
 fi
 
 
