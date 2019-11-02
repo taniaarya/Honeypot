@@ -26,6 +26,10 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
       # if the connection has been accepted, a new atacker is in the honeypot
       if [[ $accept = "Accepted" ]]
       then
+              timestamp=$(date +%Y-%m-%d-%H:%M:%S)
+
+              sleep 2
+
               # extracts attacker ip and session id from MITM login file
             	ip=$(tail -1 /root/MITM_data/logins/$1.txt | awk -F\; '{print $2}')
               session=$(tail -1 /root/MITM_data/logins/$1.txt | awk -F\; '{print $3}')
@@ -35,11 +39,10 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
             	if [ $connMade -eq 0 ]
             	then
                 # records time of entry
-                timestamp=$(date +%Y-%m-%d-%H:%M:%S)
                 echo "The timestamp is $timestamp"
                 # makes directory to store auth.log file in
                 mkdir -p /root/Logs/$1/
-                /root/Honeypot_Scripts/timer.sh $1 $2 $4 $session $3 $ip > /root/Logs/timer$1>&1 &
+                /root/Honeypot_Scripts/timer.sh $1 $2 $4 $session $3 $ip $timestamp > /root/Logs/timer$1>&1 &
             	fi
 
               # increases connection count
@@ -80,12 +83,14 @@ tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log | while read a; do
             	if [ $numConn -eq 0 ] && [ $connMade -eq 1 ]
             	then
                     disConnTime=$(date +%H:%M:%S)
+
+                    mkdir -p /root/Logs/data_collection/
                                      
                     # calls recycling script passing ctid, ctip, and mitm port
-                    /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4 $ip &
+                    /root/Honeypot_Scripts/recycling_script.sh $1 $2 $4 $ip $timestamp &
 
                     # calls data collection script with session id and filesystem, ctid, attacker ip
-                    /root/Honeypot_Scripts/call_data_collection.sh $session $3 $1 $ip $disConnTime &
+                    /root/Honeypot_Scripts/call_data_collection.sh $session $3 $1 $ip $disConnTime /root/Logs/data_collection/$timestamp>&1 &
 
 		                # makes sure disk space is good
 		                /root/Honeypot_Scripts/check_health.sh &
