@@ -9,7 +9,7 @@
 # $7 = timestamp
 
 # kicks attacker out after 30 minutes
-sleep 10
+sleep 1800
 
 # time attacker is kicked out
 disConnTime=$(date +%H:%M:%S)
