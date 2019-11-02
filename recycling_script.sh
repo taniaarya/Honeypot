@@ -93,6 +93,7 @@ then
 	nohup node /root/MITM/mitm/index.js HACS200_2C 10001 172.20.0.3 102 true mitm.js > /root/Logs/MITM_$1/$timestamp>&1 &
 elif [ $1 -eq 103 ] 
 then
+	echo "Starting node process 103"
 	nohup node /root/MITM/mitm/index.js HACS200_2C 10002 172.20.0.4 103 true mitm.js > /root/Logs/MITM_$1/$timestamp>&1 &
 elif [ $1 -eq 104 ] 
 then
