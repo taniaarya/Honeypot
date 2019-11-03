@@ -29,7 +29,7 @@ sleep 25
 #ps_aux=$(ps aux | grep node)
 #echo "$ps_aux"
 
-# calls recycling script passing ctid, ctip, and mitm port
+# calls recycling script passing ctid, ctip, mitm port, and timestamp
 echo "calling recyling /root/Honeypot_Scripts/recycling_script.sh $1 $2 $3 $6"
 /root/Honeypot_Scripts/recycling_script.sh $1 $2 $3 $6 $7 > /root/Logs/recycling/$7>&1 &
 

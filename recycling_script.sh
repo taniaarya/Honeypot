@@ -12,6 +12,13 @@
 # signal start of recycling script
 echo "killer starting"
 
+# adds firewall rules to block out attacker, and reallow other attackers
+iptables --table filter --delete INPUT --source $4 --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $3 --jump ACCEPT
+iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $3 --jump DROP
+iptables --table filter --insert INPUT --protocol tcp --source $4 --destination 172.20.0.1 --in-interface enp4s1 --dport $3 --jump DROP
+
+sleep 30
+
 # kill the tail script
 pkill -f "tailing_script.sh $1"
 
@@ -27,12 +34,7 @@ echo "The mitm port is $3"
 pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 
 # allows MITM to be fully killed before adding firewall rules
-sleep 20
-
-# adds firewall rules to block out attacker, and reallow other attackers
-iptables --table filter --delete INPUT --source $4 --destination 172.20.0.1 --in-interface enp4s1 --protocol tcp --dport $3 --jump ACCEPT
-iptables --table filter --delete INPUT --protocol tcp --destination 172.20.0.1 --dport $3 --jump DROP
-iptables --table filter --insert INPUT --protocol tcp --source $4 --destination 172.20.0.1 --in-interface enp4s1 --dport $3 --jump DROP
+sleep 10
 
 # recycle time
 pct stop $1
