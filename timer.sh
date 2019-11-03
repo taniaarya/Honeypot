@@ -15,16 +15,16 @@ sleep 1800
 disConnTime=$(date +%H:%M:%S)
 
 # kill the tail script
-pkill -f "tailing_script.sh $1"
+#pkill -f "tailing_script.sh $1"
 
 # kill the tailing process started by the tailscript
-pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
+#pkill -f "tail -n 0 -F /var/lib/lxc/$1/rootfs/var/log/auth.log"
 
-echo "killing node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
-pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
+#echo "killing node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
+#pkill -f "node /root/MITM/mitm/index.js HACS200_2C $3 $2 $1 true mitm.js"
 
 # allows mitm process to be fully killed before adding firewall rules
-sleep 25
+#sleep 25
 
 #ps_aux=$(ps aux | grep node)
 #echo "$ps_aux"
