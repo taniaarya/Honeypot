@@ -35,7 +35,7 @@ echo "calling recyling /root/Honeypot_Scripts/recycling_script.sh $1 $2 $3 $6"
 
 # calls data collection script with session id and filesystem, ctid, attacker ip
 echo "calling data_collection /root/Honeypot_Scripts/call_data_collection.sh $4 $5 $1 $6 $disConnTime"
-/root/Honeypot_Scripts/call_data_collection.sh $4 $5 $1 $6 $disConnTime > /root/Logs/data_collection/$7>&1 &
+/root/Honeypot_Scripts/call_data_collection2.sh $4 $5 $1 $6 $disConnTime > /root/Logs/data_collection/$7>&1 &
 
 # makes sure disk space is good
 /root/Honeypot_Scripts/check_health.sh &
