@@ -79,7 +79,7 @@ try:
           command = command[command.find("$")+2:]
         
         # if the user used a pip to connect multiple commands, counts them as individual commands
-        commands = re.split('|;', command)
+        commands = command.replace(";", "|").split("|")
 
         for com in commands:
           # removes extraneous hex characters and adds to master list of commands
