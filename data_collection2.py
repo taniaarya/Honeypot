@@ -78,8 +78,8 @@ try:
         elif ("~$" in command):
           command = command[command.find("$")+2:]
         
-        # if the user used a pip to connect multiple commands, counts them as individual commands
-        commands = command.split("|")
+        # if the user used a pipe or semicolon to connect multiple commands, counts them as individual commands
+        commands = command.replace(";", "|").split("|")
 
         for com in commands:
           # removes extraneous hex characters and adds to master list of commands
@@ -177,6 +177,7 @@ try:
         print(response)
         pass 
 except EOFError:
+  print("EOF error has occured")
   # attacker is level 1 if no commands are run
   if len(command_list) == 0:
     level = 1
@@ -251,7 +252,8 @@ except EOFError:
     except:
       print(response)
       pass 
-except Exception:
+except Exception as e:
+  print(e)
   try:
     session = sys.argv[1]
     file_system = sys.argv[2]
