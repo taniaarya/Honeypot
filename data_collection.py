@@ -90,14 +90,15 @@ try:
           found_key = False
           
           #loops through all commands in dictionary
-          for key in attacker_levels.keys():
-            if key in com and "cpuinfo" not in com:
-              # sets level to the highest match
-              level = max(level, attacker_levels.get(key))
-              found_key = True
-          # if the command run matches none of the commands in the dictionary, mails it to researchers
-          if not found_key:
-            mail_new_command += "{}\n\t".format(com)
+          if "cpuinfo" not in com:
+            for key in attacker_levels.keys():
+              if key in com:
+                # sets level to the highest match
+                level = max(level, attacker_levels.get(key))
+                found_key = True
+            # if the command run matches none of the commands in the dictionary, mails it to researchers
+            if not found_key:
+              mail_new_command += "{}\n\t".format(com)
       line = file.readline()
 
     # attacker is level 1 if no commands are run
