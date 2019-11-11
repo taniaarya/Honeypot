@@ -91,7 +91,7 @@ try:
           
           #loops through all commands in dictionary
           for key in attacker_levels.keys():
-            if key in com:
+            if key in com and "cpuinfo" not in com:
               # sets level to the highest match
               level = max(level, attacker_levels.get(key))
               found_key = True
